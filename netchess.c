@@ -50,7 +50,7 @@ void chess_shell(board_t board)
 	char team = 0, turn_change = 0;
 
 	board_t temp_board;
-	memcpy(temp_board, board, sizeof(piece_t) * (8 * 8));
+	memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 
 	for(i = 0; i < MAX_TOKENS; i++) tokens[i] = malloc(TOKEN_LENGTH + 1);
 
@@ -85,11 +85,11 @@ void chess_shell(board_t board)
 				board_print(temp_board);
 			break;
 			case  0x3:
-				memcpy(temp_board, board, sizeof(piece_t) * (8 * 8));
+				memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				board_move(temp_board, team, tokens[1], tokens[2]);
 			break;
 			case  0x4:
-				memcpy(board, temp_board, sizeof(piece_t) * (8 * 8));
+				memcpy(board, temp_board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				team ^= 1, turn_change = 1;
 			break;
 		};
