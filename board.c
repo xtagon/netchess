@@ -70,13 +70,13 @@ void board_print(board_t b)
 
 			switch(b[j][i].type)
 			{
-				case PIECE_ROOK:   printf(" %cR  ", team_char); break;
-				case PIECE_KNIGHT: printf(" %cKn ", team_char); break;
-				case PIECE_BISHOP: printf(" %cB  ", team_char); break;
-				case PIECE_QUEEN:  printf(" %cQ  ", team_char); break;
-				case PIECE_KING:   printf(" %cK  ", team_char); break;
-				case PIECE_PAWN:   printf(" %cP  ", team_char); break;
-				case PIECE_EMPTY:  printf("  .  "); 		break;
+				case PIECE_ROOK:   printf(" %c♖  ", team_char); break;
+				case PIECE_KNIGHT: printf(" %c♘  ", team_char); break;
+				case PIECE_BISHOP: printf(" %c♘  ", team_char); break;
+				case PIECE_QUEEN:  printf(" %c♕  ", team_char); break;
+				case PIECE_KING:   printf(" %c♔  ", team_char); break;
+				case PIECE_PAWN:   printf(" %c♙  ", team_char); break;
+				case PIECE_EMPTY:  printf("  ◦  "); 		break;
 			};
 		}
 
