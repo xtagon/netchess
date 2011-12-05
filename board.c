@@ -17,7 +17,7 @@ void board_init(board_t b)
 		for(j = 0; j < 8; j++)
 			b[i][j].team = -1;
 
-	for(i = 0; i < 2; i++)
+	for(i = 0; i < TEAMS; i++)
 	{
 		b[i * 7][0].type = PIECE_ROOK;
 		b[i * 7][0].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
@@ -44,9 +44,9 @@ void board_init(board_t b)
 		b[i * 7][7].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
 	}
 
-	for(i = 0; i < 8; i++)
+	for(i = 0; i < ROWCOL; i++)
 	{
-		for(j = 0; j < 2; j++)
+		for(j = 0; j < TEAMS; j++)
 		{
 			b[j ? 6 : 1][i].type = PIECE_PAWN;
 			b[j ? 6 : 1][i].team = j;
@@ -59,12 +59,12 @@ void board_print(board_t b)
 	printf("\n     A    B    C    D    E    F    G    H\n\n");
 
 	int i;
-	for(i = 0; i < 8; i++)
+	for(i = 0; i < ROWCOL; i++)
 	{
-		printf("%i  ", (8 - i));
+		printf("%i  ", (ROWCOL - i));
 
 		int j;
-		for(j = 0; j < 8; j++)
+		for(j = 0; j < ROWCOL; j++)
 		{
 			char team_char = (b[j][i].team == TEAM_WHITE) ? '+' : '-';
 
