@@ -20,28 +20,28 @@ void board_init(board_t b)
 	for(i = 0; i < TEAMS; i++)
 	{
 		b[i * 7][0].type = PIECE_ROOK;
-		b[i * 7][0].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][0].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][1].type = PIECE_KNIGHT;
-		b[i * 7][1].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][1].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][2].type = PIECE_BISHOP;
-		b[i * 7][2].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][2].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][3 + i].type = PIECE_QUEEN;
-		b[i * 7][3 + i].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][3 + i].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][4 - i].type = PIECE_KING;
-		b[i * 7][4 - i].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][4 - i].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][5].type = PIECE_BISHOP;
-		b[i * 7][5].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][5].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][6].type = PIECE_KNIGHT;
-		b[i * 7][6].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][6].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][7].type = PIECE_ROOK;
-		b[i * 7][7].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][7].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 	}
 
 	for(i = 0; i < ROWCOL; i++)
