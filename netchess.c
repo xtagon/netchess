@@ -98,7 +98,7 @@ void chess_shell(board_t board)
 	for(i = 0; i < MAX_TOKENS; i++) free(tokens[i]);
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	board_t b;
 	board_init(b);
