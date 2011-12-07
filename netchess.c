@@ -62,6 +62,8 @@ void chess_shell(board_t board)
 		{
 			printf("%s team moves\n: ", team_names[team]);
 			turn_change = 0;
+//flipTurn()
+//getOpponentMove(2) for move of opponent
 		}
 			 else printf(": ");
 
@@ -87,10 +89,12 @@ void chess_shell(board_t board)
 			case  0x3:
 				memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				board_move(temp_board, team, tokens[1], tokens[2]);
+//store src, dest coordinate_t for transfer
 			break;
 			case  0x4:
 				memcpy(board, temp_board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				team ^= 1, turn_change = 1;
+//movePiece(2)
 			break;
 		};
 	}
@@ -102,7 +106,7 @@ int main(int argc, char** argv)
 {
 	board_t b;
 	board_init(b);
-
+//initialize server/client here
 	chess_shell(b);
 
 	return 0;
