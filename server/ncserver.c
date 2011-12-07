@@ -1,6 +1,7 @@
 #include "linsock.h"
 #include "ncserver.h"
 
+
 int state;
 int sock;
 int conn;
@@ -35,16 +36,39 @@ len=sizeof(cliaddr);
 if((conn=accept(sock,(struct sockaddr*)&cliaddr,&len))<0){ //at present version only one connection per run
 fprintf(stderr,"Connection error\n");
 return ERROR;
-};
+}
 state=STATE_CONNECTED;
 turn=TEAM_WHITE;
 return OK;
 }
-int isMatchSet(){}
-int movePiece(coordinate_t src, coordinate_t dest){
-if(state==STATE_PLAYING && turn==TEAM_WHITE){
 
+int isMatchSet(){
+if(state==STATE_CONNECTED)
+return OK;
+return ERROR;
+}
+
+int movePiece(coordinate_t src, coordinate_t dest){
+char buff[5]; int w;
+
+if(state==STATE_CONNECTED){
+if(turn==TEAM_WHITE){
+buff[0]=src[0]; buff[1]=src[1];
+buff[2]=dest[0]; buff[3]=dest[1];
+buff[4]='\0';
+w=write(conn,buff,5); //TODO: Write fault tolerant write(3) routine
+flipTurn();
+return OK;
+}
 }
 return ERROR;
+}
+
+int getTurn(){
+return turn;
+}
+
+void flipTurn(int t){
+turn^=1;
 }
 

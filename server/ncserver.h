@@ -15,5 +15,6 @@
 int startServer(); //start the chess server
 int isMatchSet(); //0 if set -1 otherwise
 int movePiece(coordinate_t src, coordinate_t dest); //for moving pieces
-
+int getTurn();
+void flipTurn();
 #endif
