@@ -64,6 +64,21 @@ return OK;
 return ERROR;
 }
 
+int getOpponentMove(coordinate_t *oppsrc, coordinate_t *oppdest){
+char buff[5]; int r;
+if(state==STATE_CONNECTED){
+if(turn==TEAM_BLACK){
+r=read(conn,buff,5); //blocks here and waits for the opponent to make his turn
+if(r>=4){
+*oppsrc[0]=buff[0]; *oppsrc[1]=buff[1];
+*oppdest[0]=buff[2]; *oppdest[1]=buff[3];
+}
+//done reading
+}
+}
+return ERROR;
+}
+
 int getTurn(){
 return turn;
 }
