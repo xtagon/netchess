@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "server/ncserver.h"
 #include "board.h"
 
 #define MAX_TOKENS 3
@@ -11,6 +11,8 @@
 const char* commands[] = {"q", "help", "board", "move", "turn", 0};
 
 const char* team_names[] = {"White", "Black"};
+
+int conntype=0; //0 for standalone, 1 as server, 2 as client
 
 static void tokenize(char* str, char** tokens);
 static int cmd_to_idx(char* cmd);
@@ -43,6 +45,8 @@ void print_help()
 
 void chess_shell(board_t board)
 {
+	coordinate_t currSrc, currDest;
+	coordinate_t oppSrc, oppDest;
 	int i, run = 1;
 	char* tokens[MAX_TOKENS];
 	char  str[MAX_INPUT_LENGTH];
@@ -62,8 +66,19 @@ void chess_shell(board_t board)
 		{
 			printf("%s team moves\n: ", team_names[team]);
 			turn_change = 0;
-//flipTurn()
-//getOpponentMove(2) for move of opponent
+			if(conntype==TYPE_SERVER){
+				flipTurn(); //flipTurn() for server; black's turn
+				getOpponentMove(&oppSrc,&oppDest); //getOpponentMove(2) for move of opponent: blocks here
+				//set the board according to opponent moves
+				memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
+				board_move(temp_board, team, oppSrc, oppDest); //black's move made on temporary board
+				//make changes to board permanently and allow server/white to move again
+				memcpy(board, temp_board, sizeof(piece_t) * (ROWCOL * ROWCOL));
+				team ^= 1, turn_change = 1;
+				//printf("Opponent moved");
+			} 
+
+			
 		}
 			 else printf(": ");
 
@@ -89,11 +104,14 @@ void chess_shell(board_t board)
 			case  0x3:
 				memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				board_move(temp_board, team, tokens[1], tokens[2]);
-//store src, dest coordinate_t for transfer
+				currSrc[0]=tokens[1][0], currSrc[1]=tokens[1][1], currDest[0]=tokens[2][0], currDest[1]=tokens[2][1]; //store src, dest coordinate_t for transfer
 			break;
 			case  0x4:
 				memcpy(board, temp_board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				team ^= 1, turn_change = 1;
+				if(conntype==TYPE_SERVER){
+					movePiece(currSrc,currDest);
+				}
 //movePiece(2)
 			break;
 		};
@@ -104,12 +122,35 @@ void chess_shell(board_t board)
 
 int main(int argc, char** argv)
 {
-	board_t b;
-	board_init(b);
+if(argc==2){
+if(argv[1][0]=='0'){ conntype=TYPE_STANDALONE; printf("Standalone mode\n");}
+if(argv[1][0]=='1'){ conntype=TYPE_SERVER; printf("Server mode\n");}	
+//set for client mode
+}else{
+printf("netchess <opt>\n<opt>=0 for standalone\n<opt>=1 for server\n");
+return -1;
+}
+board_t b;
+board_init(b);
 //initialize server/client here
-	chess_shell(b);
+switch(conntype){
+case TYPE_SERVER:
+startServer();
+break;
+default:
+break;
+}
+//check if connection/match is ready
+switch(conntype){
+case TYPE_SERVER:
+if(isMatchSet()==OK) printf("Match set\n");
+break;
+default:
+break;
+}
+chess_shell(b);
 
-	return 0;
+return 0;
 }
 
 void tokenize(char* str, char** tokens)
