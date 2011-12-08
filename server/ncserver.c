@@ -68,11 +68,11 @@ char buff[5]; int r;
 if(state==STATE_CONNECTED){
 if(trn==TEAM_BLACK){
 r=read(conn,buff,5); //blocks here and waits for the opponent to make his turn
-printf("Reading %d B\n",r);
+//printf("Reading %d B\n",r);
 if(r>=4){
 oppsrc[0]=buff[0]; oppsrc[1]=buff[1];
 oppdest[0]=buff[2]; oppdest[1]=buff[3];
-printf("Opponent %c%c%c%c\n",buff[0],buff[1],buff[2],buff[3]); //DEBUG
+//printf("Opponent %c%c%c%c\n",buff[0],buff[1],buff[2],buff[3]); //DEBUG
 //printf("Passing to shell %c%c%c%c\n",*oppsrc[0],*oppsrc[1],*oppdest[0],*oppdest[1]); //DEBUG
 }
 //done reading

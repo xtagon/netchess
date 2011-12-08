@@ -70,7 +70,7 @@ L:
 			if(conntype==TYPE_SERVER){
 				if(team!=myTeam){
 				getOpponentMove(oppSrc,oppDest); //getOpponentMove(2) for move of opponent: blocks here
-				printf("Opponent %c%c%c%c\n",oppSrc[0],oppSrc[1],oppDest[0],oppDest[1]);
+				//printf("Opponent %c%c%c%c\n",oppSrc[0],oppSrc[1],oppDest[0],oppDest[1]);
 				//set the board according to opponent moves
 				memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				board_move(temp_board, team, oppSrc, oppDest); //black's move made on temporary board
@@ -118,7 +118,7 @@ L:
 				if(conntype==TYPE_SERVER){
 					movePiece(currSrc,currDest);
 					flipTurn(); //proper place for flipping turn
-					printf("getTurn():%d\n",getTurn());
+					//printf("getTurn():%d\n",getTurn());
 				}
 //movePiece(2)
 			break;
