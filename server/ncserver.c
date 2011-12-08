@@ -5,7 +5,7 @@
 int state;
 int sock;
 int conn;
-int turn;
+int trn;
 size_t len;
 struct sockaddr_in servaddr;
 struct sockaddr_in cliaddr;
@@ -38,7 +38,7 @@ fprintf(stderr,"Connection error\n");
 return ERROR;
 }
 state=STATE_CONNECTED;
-turn=TEAM_WHITE;
+trn=TEAM_WHITE;
 return OK;
 }
 
@@ -52,26 +52,28 @@ int movePiece(coordinate_t src, coordinate_t dest){
 char buff[5]; int w;
 
 if(state==STATE_CONNECTED){
-if(turn==TEAM_WHITE){
+if(trn==TEAM_WHITE){
 buff[0]=src[0]; buff[1]=src[1];
 buff[2]=dest[0]; buff[3]=dest[1];
 buff[4]='\0';
 w=write(conn,buff,5); //TODO: Write fault tolerant write(3) routine
-flipTurn();
 return OK;
 }
 }
 return ERROR;
 }
 
-int getOpponentMove(coordinate_t *oppsrc, coordinate_t *oppdest){
+int getOpponentMove(char *oppsrc, char *oppdest){
 char buff[5]; int r;
 if(state==STATE_CONNECTED){
-if(turn==TEAM_BLACK){
+if(trn==TEAM_BLACK){
 r=read(conn,buff,5); //blocks here and waits for the opponent to make his turn
+printf("Reading %d B\n",r);
 if(r>=4){
-*oppsrc[0]=buff[0]; *oppsrc[1]=buff[1];
-*oppdest[0]=buff[2]; *oppdest[1]=buff[3];
+oppsrc[0]=buff[0]; oppsrc[1]=buff[1];
+oppdest[0]=buff[2]; oppdest[1]=buff[3];
+printf("Opponent %c%c%c%c\n",buff[0],buff[1],buff[2],buff[3]); //DEBUG
+//printf("Passing to shell %c%c%c%c\n",*oppsrc[0],*oppsrc[1],*oppdest[0],*oppdest[1]); //DEBUG
 }
 //done reading
 }
@@ -80,10 +82,11 @@ return ERROR;
 }
 
 int getTurn(){
-return turn;
+return trn;
 }
 
-void flipTurn(int t){
-turn^=1;
+void flipTurn(){
+if(trn==TEAM_WHITE) {trn=TEAM_BLACK; return;}
+trn=TEAM_WHITE;
 }
 
