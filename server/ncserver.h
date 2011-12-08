@@ -21,5 +21,5 @@ int isMatchSet(); //0 if set -1 otherwise
 int movePiece(coordinate_t src, coordinate_t dest); //for moving pieces
 int getTurn();
 void flipTurn();
-int getOpponentMove(coordinate_t *oppsrc, coordinate_t *oppdest);
+int getOpponentMove(char *oppsrc, char *oppdest);
 #endif
