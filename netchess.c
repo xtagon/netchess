@@ -13,6 +13,7 @@ const char* commands[] = {"q", "help", "board", "move", "turn", 0};
 const char* team_names[] = {"White", "Black"};
 
 int conntype=0; //0 for standalone, 1 as server, 2 as client
+int myTeam=TEAM_WHITE; //initially
 
 static void tokenize(char* str, char** tokens);
 static int cmd_to_idx(char* cmd);
@@ -67,15 +68,18 @@ void chess_shell(board_t board)
 			printf("%s team moves\n: ", team_names[team]);
 			turn_change = 0;
 			if(conntype==TYPE_SERVER){
-				flipTurn(); //flipTurn() for server; black's turn
-				getOpponentMove(&oppSrc,&oppDest); //getOpponentMove(2) for move of opponent: blocks here
+				if(team!=myTeam){
+				getOpponentMove(oppSrc,oppDest); //getOpponentMove(2) for move of opponent: blocks here
+				printf("Opponent %c%c%c%c\n",oppSrc[0],oppSrc[1],oppDest[0],oppDest[1]);
 				//set the board according to opponent moves
 				memcpy(temp_board, board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				board_move(temp_board, team, oppSrc, oppDest); //black's move made on temporary board
 				//make changes to board permanently and allow server/white to move again
 				memcpy(board, temp_board, sizeof(piece_t) * (ROWCOL * ROWCOL));
-				team ^= 1, turn_change = 1;
+				team ^= 1; turn_change=1;
+				flipTurn(); //continue required
 				//printf("Opponent moved");
+				}
 			} 
 
 			
@@ -111,6 +115,8 @@ void chess_shell(board_t board)
 				team ^= 1, turn_change = 1;
 				if(conntype==TYPE_SERVER){
 					movePiece(currSrc,currDest);
+					flipTurn(); //proper place for flipping turn
+					printf("getTurn():%d\n",getTurn());
 				}
 //movePiece(2)
 			break;
@@ -123,8 +129,8 @@ void chess_shell(board_t board)
 int main(int argc, char** argv)
 {
 if(argc==2){
-if(argv[1][0]=='0'){ conntype=TYPE_STANDALONE; printf("Standalone mode\n");}
-if(argv[1][0]=='1'){ conntype=TYPE_SERVER; printf("Server mode\n");}	
+if(argv[1][0]=='0'){ conntype=TYPE_STANDALONE; printf("Standalone mode\n"); /*setting teams in standalone mode is irrelevant*/}
+if(argv[1][0]=='1'){ conntype=TYPE_SERVER; printf("Server mode\n"); myTeam=TEAM_WHITE;}	
 //set for client mode
 }else{
 printf("netchess <opt>\n<opt>=0 for standalone\n<opt>=1 for server\n");
