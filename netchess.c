@@ -60,7 +60,7 @@ void chess_shell(board_t board)
 	for(i = 0; i < MAX_TOKENS; i++) tokens[i] = malloc(TOKEN_LENGTH + 1);
 
 	printf("Game starts with the white(+) team.\n");
-
+L:
 	while(run)
 	{
 		if(turn_change)
@@ -77,7 +77,9 @@ void chess_shell(board_t board)
 				//make changes to board permanently and allow server/white to move again
 				memcpy(board, temp_board, sizeof(piece_t) * (ROWCOL * ROWCOL));
 				team ^= 1; turn_change=1;
-				flipTurn(); //continue required
+				flipTurn();
+
+				 goto L;
 				//printf("Opponent moved");
 				}
 			} 
