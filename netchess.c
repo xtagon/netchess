@@ -130,11 +130,15 @@ L:
 
 int main(int argc, char** argv)
 {
+int r;
 if(argc==2){
 if(argv[1][0]=='0'){ conntype=TYPE_STANDALONE; printf("Standalone mode\n"); /*setting teams in standalone mode is irrelevant*/}
 if(argv[1][0]=='1'){ conntype=TYPE_SERVER; printf("Server mode\n"); myTeam=TEAM_WHITE;}	
 //set for client mode
-}else{
+}else if(argc==3){
+conntype=TYPE_CLIENT; printf("Client mode\n"); myTeam=TEAM_BLACK;
+}
+else{
 printf("netchess <opt>\n<opt>=0 for standalone\n<opt>=1 for server\n");
 return -1;
 }
@@ -143,7 +147,12 @@ board_init(b);
 //initialize server/client here
 switch(conntype){
 case TYPE_SERVER:
-startServer();
+r=startServer();
+if(r==OK){fprintf(stderr,"Server started\n");} else return ERROR;
+break;
+case TYPE_CLIENT:
+r=startClient();
+if(r==OK){fprintf(stderr,"Running as client\n");} else return ERROR;
 break;
 default:
 break;
@@ -151,8 +160,10 @@ break;
 //check if connection/match is ready
 switch(conntype){
 case TYPE_SERVER:
-if(isMatchSet()==OK) printf("Match set\n");
+if(isMatchSet()==OK) printf("Match set as server\n");
 break;
+case TYPE_CLIENT:
+if(isMatchSet()==OK) printf("Match set as client\n");
 default:
 break;
 }
