@@ -42,6 +42,35 @@ trn=TEAM_WHITE;
 return OK;
 }
 
+int startClient(char *a){
+bzero(&servaddr,sizeof(servaddr));
+servaddr.sin_family=AF_INET;
+servaddr.sin_port=htons(CHESSPORT);
+if(inet_pton(AF_INET,a,&servaddr.sin_addr)<=0){
+fprintf(stderr,"Error in address\n");
+return ERROR;;
+}
+state=STATE_CONNECTING;
+if((sock=socket(AF_INET,SOCK_STREAM,0))<0){
+fprintf(stderr,"Error creating socket\n");
+return ERROR;
+}
+if(connect(sock,(struct sockaddr*)&servaddr,sizeof(servaddr))<0){
+fprintf(stderr,"Error connecting to server\n");
+return ERROR;
+}
+state=STATE_CONNECTED;
+trn=TEAM_BLACK; //client is black;
+return OK;
+}
+
+int closeServer(){
+if(conn>0)
+close(conn);
+if(sock>0)
+close(sock);
+return OK;
+}
 int isMatchSet(){
 if(state==STATE_CONNECTED)
 return OK;

@@ -17,6 +17,8 @@
 #define STATE_PLAYING 0x040
 
 int startServer(); //start the chess server
+int startClient(char *address); //start client which connect to server at
+int closeServer();
 int isMatchSet(); //0 if set -1 otherwise
 int movePiece(coordinate_t src, coordinate_t dest); //for moving pieces
 int getTurn();
