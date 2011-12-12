@@ -51,16 +51,16 @@ fprintf(stderr,"Error in address\n");
 return ERROR;;
 }
 state=STATE_CONNECTING;
-if((sock=socket(AF_INET,SOCK_STREAM,0))<0){
+if((conn=socket(AF_INET,SOCK_STREAM,0))<0){
 fprintf(stderr,"Error creating socket\n");
 return ERROR;
 }
-if(connect(sock,(struct sockaddr*)&servaddr,sizeof(servaddr))<0){
+if(connect(conn,(struct sockaddr*)&servaddr,sizeof(servaddr))<0){
 fprintf(stderr,"Error connecting to server\n");
 return ERROR;
 }
 state=STATE_CONNECTED;
-trn=TEAM_BLACK; //client is black;
+trn=TEAM_WHITE; //client is black, but white moves first;
 return OK;
 }
 
@@ -81,7 +81,7 @@ int movePiece(coordinate_t src, coordinate_t dest){
 char buff[5]; int w;
 
 if(state==STATE_CONNECTED){
-if(trn==TEAM_WHITE){
+if(trn==TEAM_WHITE || trn==TEAM_BLACK){
 buff[0]=src[0]; buff[1]=src[1];
 buff[2]=dest[0]; buff[3]=dest[1];
 buff[4]='\0';
@@ -95,7 +95,7 @@ return ERROR;
 int getOpponentMove(char *oppsrc, char *oppdest){
 char buff[5]; int r;
 if(state==STATE_CONNECTED){
-if(trn==TEAM_BLACK){
+//if(trn==TEAM_BLACK){
 r=read(conn,buff,5); //blocks here and waits for the opponent to make his turn
 //printf("Reading %d B\n",r);
 if(r>=4){
@@ -105,7 +105,7 @@ oppdest[0]=buff[2]; oppdest[1]=buff[3];
 //printf("Passing to shell %c%c%c%c\n",*oppsrc[0],*oppsrc[1],*oppdest[0],*oppdest[1]); //DEBUG
 }
 //done reading
-}
+//}
 }
 return ERROR;
 }
