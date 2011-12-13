@@ -15,6 +15,9 @@
 #define TEAM_WHITE 0
 #define TEAM_BLACK 1
 
+#define TEAMS 2
+#define ROWCOL 8
+
 typedef char coordinate_t[2];
 
 typedef struct piece_s

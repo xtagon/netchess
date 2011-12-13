@@ -7,46 +7,46 @@ const char* piece_names[] = {NULL, "pawn", "rook", "knight", "bishop", "queen", 
 
 void board_init(board_t b)
 {
-	memset(b, 0, sizeof(piece_t) * (8 * 8));
+	memset(b, 0, sizeof(piece_t) * (ROWCOL * ROWCOL));
 
 	/* Initialize the team of each place to -1 so that we don't have empty spaces
 	parading around like they're part of the white team */
 
 	int i, j;
-	for(i = 0; i < 8; i++)
-		for(j = 0; j < 8; j++)
+	for(i = 0; i < ROWCOL; i++)
+		for(j = 0; j < ROWCOL; j++)
 			b[i][j].team = -1;
 
-	for(i = 0; i < 2; i++)
+	for(i = 0; i < TEAMS; i++)
 	{
 		b[i * 7][0].type = PIECE_ROOK;
-		b[i * 7][0].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][0].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][1].type = PIECE_KNIGHT;
-		b[i * 7][1].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][1].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][2].type = PIECE_BISHOP;
-		b[i * 7][2].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][2].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][3 + i].type = PIECE_QUEEN;
-		b[i * 7][3 + i].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][3 + i].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][4 - i].type = PIECE_KING;
-		b[i * 7][4 - i].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][4 - i].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][5].type = PIECE_BISHOP;
-		b[i * 7][5].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][5].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][6].type = PIECE_KNIGHT;
-		b[i * 7][6].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][6].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 
 		b[i * 7][7].type = PIECE_ROOK;
-		b[i * 7][7].team = (i == 0) ? TEAM_WHITE : TEAM_BLACK;
+		b[i * 7][7].team = (i == TEAM_WHITE) ? TEAM_WHITE : TEAM_BLACK;
 	}
 
-	for(i = 0; i < 8; i++)
+	for(i = 0; i < ROWCOL; i++)
 	{
-		for(j = 0; j < 2; j++)
+		for(j = 0; j < TEAMS; j++)
 		{
 			b[j ? 6 : 1][i].type = PIECE_PAWN;
 			b[j ? 6 : 1][i].team = j;
@@ -59,12 +59,12 @@ void board_print(board_t b)
 	printf("\n     A    B    C    D    E    F    G    H\n\n");
 
 	int i;
-	for(i = 0; i < 8; i++)
+	for(i = 0; i < ROWCOL; i++)
 	{
-		printf("%i  ", (8 - i));
+		printf("%i  ", (ROWCOL - i));
 
 		int j;
-		for(j = 0; j < 8; j++)
+		for(j = 0; j < ROWCOL; j++)
 		{
 			char team_char = (b[j][i].team == TEAM_WHITE) ? '+' : '-';
 
@@ -127,10 +127,10 @@ void coord_to_cn(coordinate_t coord, char* cn)
 int is_valid_move(board_t b, coordinate_t src, coordinate_t dest)
 {
 	int i, j;
-	for(i = 0; i < 2; i++)
+	for(i = 0; i < TEAMS; i++)
 	{
-		if(src[i]  < 0 || src[i]  > 8) return 0;
-		if(dest[i] < 0 || dest[i] > 8) return 0;
+		if(src[i]  < 0 || src[i]  > ROWCOL) return 0;
+		if(dest[i] < 0 || dest[i] > ROWCOL) return 0;
 	}
 
 	char src_type  = b[ src[0]][ src[1]].type,  src_team = b[ src[0]][ src[1]].team;
